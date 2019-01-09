@@ -1,0 +1,31 @@
+.full-width {
+    width: 100%;
+  }
+
+  /* .example-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .example-container > * {
+    width: 50%;
+  } */
+
+  /* .card-table {
+    width: 50% !important;
+  } */
+
+  .mat-button, .mat-raised-button{
+    background-color:grey;
+} 
+
+.notes{
+  background-color:lightyellow;
+  border-style:solid;
+  border-color:yellow;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  font-size:14px;
+  margin-left: 15px;
+  margin-right: 5px;
+}
+  

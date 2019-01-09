@@ -1,0 +1,208 @@
+<div>
+        
+        <table class="card-table">
+                <tr>
+                        <td>
+                                <mat-form-field>
+                                        <mat-select placeholder="Select User Type" [(value)]="userType" (selectionChange)="updateUser()">
+                                                <mat-option>None</mat-option>
+                                                <mat-option value="owner">Owner</mat-option>
+                                                <mat-option value="verifier">Verifier</mat-option>
+                                                <mat-option value="checker">Checker</mat-option>
+                                        </mat-select>
+                                </mat-form-field>
+                        </td>
+                        <td>
+                                <p class="notes"><i class="fas fa-info-circle"></i> Choose from three user types.
+                                        <br/>
+                                        <b>Owner</b> - Document owner.
+                                        <br/>
+                                        <b>Verifier</b> - Person/Organization verifying the correctness of the document.
+                                        <br/>
+                                        <b>Checker</b> - Third party who wants to verify that document owner's document was
+                                        verified by the verifier.
+                                </p>
+
+                        </td>
+
+        </table>
+
+
+
+        <div *ngIf="userType === 'owner'">
+                <mat-card>
+                        <mat-card-title>Request Document Verification</mat-card-title>
+                        <mat-card-content>
+                                <table class="card-table">
+                                        <tr>
+                                                <td width="50%">
+                                                        <mat-form-field class="full-width">
+                                                                <input type="text" matInput id="verifierAddr" placeholder="Verifier Address" #verifierAddr/>
+                                                        </mat-form-field>
+                                                </td>
+                                                <td width="50%" rowspan="3">
+                                                        <p class="notes"><i class="fas fa-info-circle"></i>
+                                                                You can submit a document for verification by person/organisation by filling up the below fields and clicking submit.
+                                                                <br>
+                                                                <b>Verifier Address</b> - Address of the person/organization
+                                                                verifying the doc. Only this particular address will have
+                                                                access to verify this document.
+                                                                <br/>
+                                                                <b>Document Hash</b> - Hash of the document to be verified.
+                                                                <br/>
+                                                                <b> document discoverable </b>- Checking this field will make
+                                                                the document discoverable to third parties for document checking.
+                                                                The document is only discoverable by its hash value.
+                                                                <br/>
+                                                                <b>Submit</b>- Queues up document for verification.
+                                                        </p>
+                                                </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>
+
+                                                        <mat-form-field class="full-width">
+                                                                <input type="text" matInput id="docHash" placeholder="Document Hash" #docHash/>
+                                                        </mat-form-field>
+                                                </td>
+                                        </tr>
+
+                                        <tr>
+                                                <td>
+                                                        <mat-checkbox class="example-margin" [(ngModel)]="docDiscoverable">Is document discoverable
+                                                        </mat-checkbox>
+                                                </td>
+                                        </tr>
+
+                                        <tr>
+                                                <td>
+                                                        <button mat-raised-button color="accent" (click)='requestDocVerification(verifierAddr, docHash)'>Submit</button>
+                                                </td>
+                                        </tr>
+                                </table>
+                                <br/>
+                                {{requestTransactionDetails}}
+                        </mat-card-content>
+                </mat-card>
+        </div>
+
+        <div *ngIf="userType === 'verifier'">
+                <mat-card>
+                        <mat-card-title>Verify Document</mat-card-title>
+                        <mat-card-content>
+                                <table class="card-table">
+                                        <tr>
+                                                <td width="50%">
+                                                        <mat-form-field class="full-width">
+                                                                <input type="text" matInput id="ownerAddr" placeholder="Owner Address" #ownerAddr/>
+                                                        </mat-form-field>
+                                                </td>
+                                                <td width="50%" rowspan="2">
+                                                        <p class="notes"><i class="fas fa-info-circle"></i>
+                                                                You can verify documents submitted to you for verification by filling up the below fields and clicking verify.
+                                                                <br>
+                                                                <b>Owner Address</b> - Address of the person/organization to
+                                                                which the document belongs.
+                                                                <br/>
+                                                                <b>Document Hash</b> - Hash of the document to be verified. If you don't have the document hash you can Calculate
+                                                                document hash in the below 'Calculate File Hash' widget.
+                                                                <br/>
+                                                                <b>Verify</b>- Clicking on verify deems document's correctness.
+                                                        </p>
+                                                </td>
+                                        </tr>
+                                        <tr>
+                                                <td width="50%">
+
+                                                        <mat-form-field class="full-width">
+                                                                <input type="text" matInput id="verifyDocHash" placeholder="Document Hash" #verifyDocHash/>
+                                                        </mat-form-field>
+                                                </td>
+                                        </tr>
+                                </table>
+
+                                <button mat-raised-button color="accent" (click)='verifyDoc(ownerAddr, verifyDocHash)'>Verify</button>
+
+                                <br/> {{verificationTransactionDetails}}
+                        </mat-card-content>
+                </mat-card>
+        </div>
+
+        <br/>
+
+        <mat-card>
+                <mat-card-title>Document Status</mat-card-title>
+                <mat-card-content>
+
+                        <table class="card-table">
+                                <tr>
+                                        <td width="50%">
+                                                <mat-form-field class="full-width">
+                                                        <input type="text" matInput id="checkAddr" placeholder="Owner Address" #checkAddr/>
+                                                </mat-form-field>
+                                        </td>
+                                        <td width="50%" rowspan="3">
+                                                <p class="notes"><i class="fas fa-info-circle"></i>
+                                                        You can check status of document. Status
+                                                        <b>VERIFIED</b> signifies that the document was verified by the verifier.
+                                                        Status
+                                                        <b>QUEUED</b> signifies the document is still to be verified.
+                                                        <br>
+                                                        <b>Owner Address</b> - Address of the person/organization to which the
+                                                        document belongs.
+                                                        <br/>
+                                                        <b>Document Hash</b> - Hash of the document to be checked.
+                                                        <br/>
+                                                        <b>Check</b>- Submits a request to check the document.
+                                                </p>
+                                        </td>
+                                </tr>
+                                <tr>
+                                        <td width="50%">
+                                                <mat-form-field class="full-width">
+                                                        <input type="text" matInput id="checkDocHash" placeholder="Document Hash" #checkDocHash/>
+                                                </mat-form-field>
+                                        </td>
+                                </tr>
+                                <tr>
+                                        <td>
+                                                Status: {{docStatus}}
+                                        </td>
+                                </tr>
+                        </table>
+                        <br/>
+                        <button mat-raised-button color="accent" (click)='getDocStatus(checkAddr, checkDocHash)'>Check</button>
+                </mat-card-content>
+        </mat-card>
+
+        <h2>{{transactionHash}}</h2>
+
+        <mat-card>
+                <mat-card-title>Calculate File Hash</mat-card-title>
+
+                <table class="card-table">
+                        <tr>
+                                <td width="50%">
+                                        <button type="button" mat-raised-button color="accent" (click)="imgFileInput.click()">Choose File</button>
+                                        <input hidden type="file" id="file" #imgFileInput (change)="handleFileInput($event.target.files)">
+                                </td>
+                                <td width="50%" rowspan="2">
+                                        <p class="notes"><i class="fas fa-info-circle"></i> You can upload a file and get a SHA-256 hash file here. Copy paste the calculated
+                                                hash to various functional inputs provided in the app.
+                                        </p>
+                                </td>
+                        </tr>
+                        <tr>
+                                <td>
+                                        <p id="dochash"></p>
+                                </td>
+                        </tr>
+                </table>
+
+        </mat-card>
+
+
+
+
+</div>
