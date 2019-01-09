@@ -1,6 +1,6 @@
 # Document Verification Dapp
 
-This is an Ethereum Dapp for document verification. The dapp suppports four actors - owner, verifier and checker.
+This is an Ethereum Dapp for document verification. The dapp suppports three actors - owner, verifier and checker.
 Owner is the owner of the document. Owner can submit verification document verification requests to verifier.
 The documents itself are not stored on the network, only document hashes.
 Verfier verifies if the document submitted is correct and can mark it as 'VERIFIED'.
